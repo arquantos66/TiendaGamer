@@ -43,6 +43,7 @@ CREATE TABLE Productos (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Codigo NVARCHAR(20) NOT NULL UNIQUE,
     Nombre NVARCHAR(50) NOT NULL,
+    Precio DECIMAL(10,3) DEFAULT 50.000 NOT NULL,
     IVA DECIMAL(7,2) NULL,
     Garantia NVARCHAR(20) NULL
 );
@@ -86,6 +87,26 @@ CREATE TABLE ServiciosProductos (
     FOREIGN KEY (Servicio) REFERENCES Servicios(ID),
     FOREIGN KEY (Producto) REFERENCES Productos(ID)
 );
+
+
+CREATE TABLE VentasFacturas (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    CodigoFactura NVARCHAR(20) UNIQUE NOT NULL,
+    Fecha DATETIME NOT NULL DEFAULT GETDATE(),
+    ClienteID INT NOT NULL,
+    VendedorID INT NOT NULL,
+    ProductoID INT NOT NULL,
+    Precio DECIMAL(10,2) NOT NULL,
+    IVA DECIMAL(10,2)  NULL,
+    Total DECIMAL(10,2) NOT NULL,
+    Metodo_Pago VARCHAR(30) CHECK(Metodo_Pago = 'Tarjeta de credito' or Metodo_Pago = 'Efectivo' or Metodo_Pago = 'Transferencia') NOT NULL,
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ID),
+    FOREIGN KEY (VendedorID) REFERENCES Vendedores(ID),
+    FOREIGN KEY (ProductoID) REFERENCES Productos(ID)
+);
+
+
+
 
 INSERT INTO Vendedores(Nombre, Apellido, Cedula, Edad)
 VALUES
@@ -135,16 +156,16 @@ VALUES
 ('Apple'),
 ('Toshiba');
 
-INSERT INTO Productos(Codigo,Nombre,IVA,Garantia)
+INSERT INTO Productos(Codigo,Nombre,Precio,IVA,Garantia)
 VALUES 
-('F001','Monitor',NULL,''),
-('F002','Teclado',NULL,''),
-('F003','Mouse',NULL,''),
-('F004','CPU',NULL,''),
-('F005','GPU',NULL,''),
-('F006','Memoria RAM',NULL,''),
-('F007','PC ensamblado',NULL,''),
-('F008','PC portatiles',NULL,'');
+('F001','Monitor',50.000,NULL,''),
+('F002','Teclado',50.000,NULL,''),
+('F003','Mouse',50.000,NULL,''),
+('F004','CPU',50.000,NULL,''),
+('F005','GPU',50.000,NULL,''),
+('F006','Memoria RAM',50.000,NULL,''),
+('F007','PC ensamblado',50.000,NULL,''),
+('F008','PC portatiles',50.000,NULL,'');
 
 INSERT INTO VendedoresProductos(Producto,Vendedor)
 VALUES
@@ -278,6 +299,24 @@ VALUES
 (8,1),
 (8,2);
 
+
+INSERT INTO VentasFacturas (CodigoFactura, Fecha, ClienteID, VendedorID,ProductoID,Precio, IVA, Total, Metodo_Pago)
+VALUES
+('FAC001', GETDATE(), 1, 1, 5,50000, NULL, 595.00, 'Tarjeta de credito'),
+('FAC002', GETDATE(), 2, 1, 3,50000, NULL, 1011.50, 'Efectivo'),
+('FAC003', GETDATE(), 3, 1, 2,50000, NULL, 1011.50, 'Transferencia'),
+('FAC004', GETDATE(), 3, 1, 1,50000, NULL, 1011.50, 'Tarjeta de credito'),
+('FAC005', GETDATE(), 2, 3, 5,50000, NULL, 1011.50, 'Efectivo'),
+('FAC006', GETDATE(), 1, 2, 8,50000, NULL, 1011.50, 'Tarjeta de credito'),
+('FAC007', GETDATE(), 2, 2, 8,50000, NULL, 1011.50, 'Transferencia'),
+('FAC008', GETDATE(), 1, 2, 4,50000, NULL, 1011.50, 'Tarjeta de credito'),
+('FAC009', GETDATE(), 2, 3, 8,50000, NULL, 1011.50, 'Efectivo'),
+('FAC010', GETDATE(), 2, 2, 7,50000, NULL, 1011.50, 'Tarjeta de credito'),
+('FAC011', GETDATE(), 1, 3, 5,50000, NULL, 1011.50, 'Efectivo'),
+('FAC012', GETDATE(), 1, 2, 7,50000, NULL, 1011.50, 'Efectivo'),
+('FAC013', GETDATE(), 3, 3, 3,50000, NULL, 357.00, 'Transferencia');
+
+
 SELECT * FROM Vendedores;
 
 SELECT * FROM Tecnicos;
@@ -299,3 +338,5 @@ SELECT * FROM ClientesProductos;
 SELECT * FROM ProductosMarcas;
 
 SELECT * FROM ServiciosProductos;
+
+SELECT * FROM VentasFacturas;

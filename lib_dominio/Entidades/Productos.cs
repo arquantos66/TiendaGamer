@@ -12,6 +12,7 @@ namespace lib_dominio.Entidades
         public int id { get; set; }
         public String? codigo { get; set; }
         public String? nombre { get; set; }
+        public decimal? precio { get; set; }
         public decimal? iva { get; set; }
         public String? garantia { get; set; }
         public List<VendedoresProductos>? VendedoresProductos { get; set; }

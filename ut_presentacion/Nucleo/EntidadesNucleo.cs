@@ -36,6 +36,7 @@ namespace ut_presentacion.Nucleo
             var EntidadPro = new Productos();
             EntidadPro.codigo = "P" + new Random().Next(1000, 9999);
             EntidadPro.nombre = "Pruebas";
+            EntidadPro.precio = 50100m;
             EntidadPro.iva = 0.19m;
             EntidadPro.garantia = "Pruebas";
 
